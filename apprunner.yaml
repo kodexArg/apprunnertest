@@ -4,14 +4,14 @@ build:
   commands:
     build:
       - pip3 install --no-cache-dir -r requirements.txt
-      - chmod +x startup.sh
   env:
     - name: DJANGO_SETTINGS_MODULE
       value: "project.settings"
 run:
-  command: ./startup.sh
+  pre-run:
+    - python3 manage.py collectstatic --noinput
+  command: gunicorn --workers 2 project.wsgi:application --bind 0.0.0.0:$PORT
   env:
-
     - name: DJANGO_DEBUG
       value: "True"
     - name: CSRF_TRUSTED_ORIGINS

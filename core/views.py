@@ -4,6 +4,7 @@ from django.http import HttpResponse
 # from django.contrib.auth.models import User
 # from django.db import connection
 import os
+import json
 
 
 
@@ -21,8 +22,13 @@ class HelloWorldView(View):
         # users = User.objects.all()
         # users_list = "\n".join([f"- {user.username} ({user.email})" for user in users])
         
-        # # Obtener el valor de PING
-        ping_value = os.getenv('PING', 'No disponible')
+        # Obtener el valor de PING del secreto
+        ping_secret = os.getenv('PING', '{}')
+        try:
+            ping_data = json.loads(ping_secret)
+            ping_value = ping_data.get('PING', 'No disponible')
+        except json.JSONDecodeError:
+            ping_value = 'Error al decodificar el secreto'
         
         # Construir respuesta
         response = f"""
