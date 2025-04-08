@@ -2,8 +2,12 @@ version: 1.0
 runtime: python311
 build:
   commands:
+    pre-build:
+      - echo "<--- Starting pre-build phase --->"
     build:
       - pip3 install --no-cache-dir -r requirements.txt
+    post-build:
+      - echo "<--- Build completed successfully --->"
   env:
     - name: DJANGO_SETTINGS_MODULE
       value: "project.settings"
@@ -18,7 +22,7 @@ build:
     - name: ALLOWED_HOSTS
       value: "nqya523khr.us-east-1.awsapprunner.com"
     - name: CSRF_TRUSTED_ORIGINS
-      value: "[https://nqya523khr.us-east-1.awsapprunner.com](https://nqya523khr.us-east-1.awsapprunner.com)"
+      value: "https://nqya523khr.us-east-1.awsapprunner.com"
     - name: POSTGRES_DB
       value: "welpdesk"
     - name: POSTGRES_USER
@@ -46,9 +50,7 @@ build:
       value-from: arn:aws:secretsmanager:us-east-1:789650504128:secret:apprunner/welpdesk-TH2uVH
 run:
   pre-run:
-    - echo "Verifying Django installation..."
-    - python3 -c "import sys; print('Python path:', sys.path)"
-    - python3 -c "import django; print('Django found at:', django.__file__)"
-    - python3 manage.py makemigrations --noinput
+    - echo "<--- Starting pre-run phase --->"
     - python3 manage.py migrate --noinput
+    - echo "<--- Pre-run phase completed --->"
   command: gunicorn project.wsgi:application --bind 0.0.0.0:$PORT
