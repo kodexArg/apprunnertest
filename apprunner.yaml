@@ -8,8 +8,6 @@ build:
     - name: DJANGO_SETTINGS_MODULE
       value: "project.settings"
 run:
-  pre-run:
-    - python3 manage.py collectstatic --noinput
   command: gunicorn --workers 2 project.wsgi:application --bind 0.0.0.0:$PORT
   env:
     - name: DJANGO_DEBUG
