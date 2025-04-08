@@ -9,9 +9,40 @@ run:
   network:
     port: 8080
   env:
-    - name: DJANGO_SETTINGS_MODULE
-      value: project.settings
-    - name: DJANGO_SECRET_KEY
-      value: django-insecure-ft$)6bfq_ehm9%k#yh7kwq+ep3f&=!drrw8%&@zbi4j-r3($_w
-    - name: DJANGO_DEBUG
+    - name: DEBUG
+      value: "True"
+    - name: LANGUAGE_CODE
+      value: "es-AR"
+    - name: TIME_ZONE
+      value: "America/Argentina/Buenos_Aires"
+    - name: USE_S3
       value: "False"
+    - name: ALLOWED_HOSTS
+      value: "localhost,*,127.0.0.1"
+    - name: SERVER_NAME
+      value: "db"
+    - name: CSRF_TRUSTED_ORIGINS
+      value: "http://localhost:8080,http://127.0.0.1:8080"
+    - name: MS_GRAPH_TENANT_ID
+      value: "909ec0c9-7db5-4c07-9114-bf1f33691845"
+    - name: MS_GRAPH_CLIENT_ID
+      value: "2d83a537-5611-45c7-8e5f-1a36ac4c6224"
+    - name: MS_GRAPH_EMAIL_SENDER
+      value: "helpdesk@alvsgroup.com"
+    - name: DEFAULT_NOTIFICATION_RECIPIENTS
+      value: "gcavedal@alvsgroup.com"
+    - name: POSTGRES_DB
+      value: "welpdesk"
+    - name: POSTGRES_USER
+      value: "welpdesk"
+    - name: POSTGRES_HOST
+      value: "localhost"
+    - name: POSTGRES_PORT
+      value: "5432"
+  secrets:
+    - name: SECRET_KEY
+      valueFrom: arn:aws:secretsmanager:us-east-1:789650504128:secret:apprunner/welpdesk-TH2uVH:SECRET_KEY
+    - name: POSTGRES_PASSWORD
+      valueFrom: arn:aws:secretsmanager:us-east-1:789650504128:secret:apprunner/welpdesk-TH2uVH:POSTGRES_PASSWORD
+    - name: MS_GRAPH_CLIENT_SECRET
+      valueFrom: arn:aws:secretsmanager:us-east-1:789650504128:secret:apprunner/welpdesk-TH2uVH:MS_GRAPH_CLIENT_SECRET
