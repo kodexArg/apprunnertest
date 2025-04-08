@@ -7,7 +7,7 @@ app = FastAPI()
 async def root():
     return JSONResponse(
         status_code=200,
-        content={"mensaje": "¡Hola Mundo desde FastAPI!"}
+        content={"mensaje": "¡Hola Mundo desde FastAPI! v2"}
     )
 
 if __name__ == "__main__":
