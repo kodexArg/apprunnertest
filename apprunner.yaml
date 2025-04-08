@@ -28,9 +28,9 @@ run:
   secrets:
     - name: PING
       value-from: arn:aws:secretsmanager:us-east-1:789650504128:secret:pingping/secret-VcQsw5:PING
-    - name: DJANGO_SECRET_KEY
-      value-from: arn:aws:secretsmanager:us-east-1:789650504128:secret:apprunner/welpdesk-TH2uVH:DJANGO_SECRET_KEY
-    - name: POSTGRES_PASSWORD
-      value-from: arn:aws:secretsmanager:us-east-1:789650504128:secret:apprunner/welpdesk-TH2uVH:POSTGRES_PASSWORD
-    - name: MS_GRAPH_CLIENT_SECRET
-      value-from: arn:aws:secretsmanager:us-east-1:789650504128:secret:apprunner/welpdesk-TH2uVH:MS_GRAPH_CLIENT_SECRET
+    # - name: JANGO_SECRET_KEY
+    #   value-from: arn:aws:secretsmanager:us-east-1:789650504128:secret:apprunner/welpdesk-TH2uVH:DJANGO_SECRET_KEY
+    # - name: POSTGRES_PASSWORD
+    #   value-from: arn:aws:secretsmanager:us-east-1:789650504128:secret:apprunner/welpdesk-TH2uVH:POSTGRES_PASSWORD
+    # - name: MS_GRAPH_CLIENT_SECRET
+    #   value-from: arn:aws:secretsmanager:us-east-1:789650504128:secret:apprunner/welpdesk-TH2uVH:MS_GRAPH_CLIENT_SECRET

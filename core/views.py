@@ -5,7 +5,7 @@ from django.http import HttpResponse
 # from django.db import connection
 import os
 
-# Create your views here.
+
 
 class HelloWorldView(View):
     def get(self, request):
