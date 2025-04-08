@@ -22,11 +22,11 @@ run:
     - name: USE_S3
       value: "False"
     - name: ALLOWED_HOSTS
-      value: "localhost,*,127.0.0.1"
+      value: "*"
     - name: SERVER_NAME
       value: "db"
     - name: CSRF_TRUSTED_ORIGINS
-      value: "http://localhost:8080,http://127.0.0.1:8080"
+      value: "https://nqya523khr.us-east-1.awsapprunner.com/"
     - name: MS_GRAPH_TENANT_ID
       value: "909ec0c9-7db5-4c07-9114-bf1f33691845"
     - name: MS_GRAPH_CLIENT_ID
@@ -40,7 +40,7 @@ run:
     - name: POSTGRES_USER
       value: "welpdesk"
     - name: POSTGRES_HOST
-      value: "localhost"
+      value: "virginia-db.cccpxuiv6n1v.us-east-1.rds.amazonaws.com"
     - name: POSTGRES_PORT
       value: "5432"
   secrets:
