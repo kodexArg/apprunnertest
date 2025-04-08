@@ -1,5 +1,5 @@
-fastapi
-uvicorn
+Django
+gunicorn
 python-dotenv
 psycopg2-binary
 boto3
@@ -8,7 +8,6 @@ requests
 python-dateutil
 pytz
 PyYAML
-Django
 asgiref
 sqlparse
 typing_extensions
@@ -16,7 +15,6 @@ dj-database-url
 django-storages
 django-vite
 django_components
-gunicorn
 whitenoise
 Brotli
 certifi
