@@ -11,6 +11,15 @@ build:
   env:
     - name: DJANGO_SETTINGS_MODULE
       value: "project.settings"
+run:
+  pre-run:
+    - echo "<--- Starting pre-run phase --->"
+    - python3 manage.py migrate --noinput
+    - echo "<--- Pre-run phase completed --->"
+  command: gunicorn project.wsgi:application --bind 0.0.0.0:$PORT
+  env:
+    - name: DJANGO_SETTINGS_MODULE
+      value: "project.settings"
     - name: DJANGO_DEBUG
       value: "True"
     - name: LANGUAGE_CODE
@@ -19,8 +28,6 @@ build:
       value: "America/Argentina/Buenos_Aires"
     - name: USE_S3
       value: "False"
-    - name: ALLOWED_HOSTS
-      value: "nqya523khr.us-east-1.awsapprunner.com"
     - name: CSRF_TRUSTED_ORIGINS
       value: "https://nqya523khr.us-east-1.awsapprunner.com"
     - name: POSTGRES_DB
@@ -48,9 +55,3 @@ build:
       value-from: arn:aws:secretsmanager:us-east-1:789650504128:secret:apprunner/welpdesk-TH2uVH
     - name: MS_GRAPH_CLIENT_SECRET
       value-from: arn:aws:secretsmanager:us-east-1:789650504128:secret:apprunner/welpdesk-TH2uVH
-run:
-  pre-run:
-    - echo "<--- Starting pre-run phase --->"
-    - python3 manage.py migrate --noinput
-    - echo "<--- Pre-run phase completed --->"
-  command: gunicorn project.wsgi:application --bind 0.0.0.0:$PORT
