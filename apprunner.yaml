@@ -5,10 +5,10 @@ build:
     build:
       - pip3 install -r requirements.txt
       - echo "Installing dependencies completed"
-    post-build:
-      - python3 manage.py migrate --noinput
-      - echo "Migrations completed"
 run:
+  pre-run:
+    - python3 manage.py migrate --noinput
+    - echo "Migrations completed"
   command: gunicorn project.wsgi:application --bind 0.0.0.0:8080
   env:
     - name: DJANGO_DEBUG
