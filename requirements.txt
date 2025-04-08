@@ -1,2 +1,14 @@
 fastapi==0.109.2
 uvicorn==0.27.1
+python-dotenv==1.0.1
+psycopg2-binary==2.9.10
+boto3==1.35.87
+botocore==1.35.87
+requests==2.32.3
+python-dateutil==2.9.0.post0
+pytz==2024.1
+PyYAML==6.0.2
+Django==5.1.7
+asgiref==3.8.1
+sqlparse==0.5.3
+typing_extensions==4.12.2
