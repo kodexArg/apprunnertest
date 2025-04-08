@@ -7,15 +7,6 @@ build:
   env:
     - name: DJANGO_SETTINGS_MODULE
       value: "project.settings"
-run:
-  pre-run:
-    - echo "Verifying Django installation..."
-    - python3 -c "import sys; print('Python path:', sys.path)"
-    - python3 -c "import django; print('Django found at:', django.__file__)"
-    - python3 manage.py makemigrations --noinput
-    - python3 manage.py migrate --noinput
-  command: gunicorn project.wsgi:application --bind 0.0.0.0:$PORT
-  env:
     - name: DJANGO_DEBUG
       value: "True"
     - name: LANGUAGE_CODE
@@ -53,3 +44,11 @@ run:
       value-from: arn:aws:secretsmanager:us-east-1:789650504128:secret:apprunner/welpdesk-TH2uVH
     - name: MS_GRAPH_CLIENT_SECRET
       value-from: arn:aws:secretsmanager:us-east-1:789650504128:secret:apprunner/welpdesk-TH2uVH
+run:
+  pre-run:
+    - echo "Verifying Django installation..."
+    - python3 -c "import sys; print('Python path:', sys.path)"
+    - python3 -c "import django; print('Django found at:', django.__file__)"
+    - python3 manage.py makemigrations --noinput
+    - python3 manage.py migrate --noinput
+  command: gunicorn project.wsgi:application --bind 0.0.0.0:$PORT
