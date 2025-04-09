@@ -17,6 +17,7 @@ CSRF_TRUSTED_ORIGINS = ["http://localhost:8000"]
 INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.staticfiles',
+    'django.contrib.auth',
     'core',
 ]
 
