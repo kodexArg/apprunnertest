@@ -8,8 +8,12 @@ import json
 from .models import UDN
 
 
-
 class HelloWorldView(View):
+    def get(self, request):
+        return HttpResponse("Hello World")
+
+
+class DatabaseInfoView(View):
     def get(self, request):
         # Obtener información de la base de datos
         try:
