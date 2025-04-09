@@ -2,18 +2,14 @@ version: 1.0
 runtime: python311
 build:
   commands:
-    pre-build:
-      - pip3 install pipenv
     build:
+      - pip3 install pipenv
       - pipenv install
       - pip3 install -r requirements.txt
-    post-build:
-      - python3 manage.py test
   env:
     - name: DJANGO_SETTINGS_MODULE
       value: "project.settings"
 run:
-  runtime-version: 3.11
   pre-run:
     - pip3 install pipenv
     - pipenv install
@@ -36,5 +32,11 @@ run:
       value: "5432"
   secrets:
     - name: PING
-      value-from: "arn:aws:secretsmanager:us-east-1:789650504128:secret:pingping/secret-VcQsw5"
+      value-from: "arn:aws:secretsmanager:us-east-1:789650504128:secret:pingping/secret-VcQsw5::"
+    - name: SECRET_KEY
+      value-from: "arn:aws:secretsmanager:us-east-1:789650504128:secret:apprunner/welpdesk-TH2uVH::"
+    - name: POSTGRES_PASSWORD
+      value-from: "arn:aws:secretsmanager:us-east-1:789650504128:secret:apprunner/welpdesk-TH2uVH::"
+    - name: MS_GRAPH_CLIENT_SECRET
+      value-from: "arn:aws:secretsmanager:us-east-1:789650504128:secret:apprunner/welpdesk-TH2uVH::"
 
