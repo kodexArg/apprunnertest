@@ -40,6 +40,11 @@ class DatabaseInfoView(View):
     def get(self, request):
         # Obtener información de la base de datos
         try:
+            # Intentar establecer una conexión explícita
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT version();")
+                db_version = cursor.fetchone()[0]
+            
             db_info = {
                 'db_name': connection.settings_dict.get('NAME', 'No disponible'),
                 'db_host': connection.settings_dict.get('HOST', 'No disponible'),
@@ -47,11 +52,14 @@ class DatabaseInfoView(View):
                 'db_user': connection.settings_dict.get('USER', 'No disponible'),
                 'db_engine': connection.settings_dict.get('ENGINE', 'No disponible'),
                 'db_options': connection.settings_dict.get('OPTIONS', {}),
+                'db_version': db_version,
+                'connection_string': os.getenv('WELPDESK_DB_CONNECTOR', 'No disponible')
             }
             db_status = "Conectada"
         except Exception as e:
             db_info = {
-                'error': str(e)
+                'error': str(e),
+                'connection_string': os.getenv('WELPDESK_DB_CONNECTOR', 'No disponible')
             }
             db_status = "Error de conexión"
         
@@ -105,7 +113,9 @@ class DatabaseInfoView(View):
             Puerto: {db_info['db_port']}
             Usuario: {db_info['db_user']}
             Motor: {db_info['db_engine']}
+            Versión: {db_info['db_version']}
             Opciones: {db_info['db_options']}
+            Cadena de conexión: {db_info['connection_string']}
             '''}
             </pre>
             
