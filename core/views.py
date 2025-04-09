@@ -16,7 +16,6 @@ class HelloWorldView(View):
 
 class PingView(View):
     def get(self, request):
-        # Obtener el valor de PING del secreto
         ping_secret = os.getenv('PING', '{}')
         try:
             ping_data = json.loads(ping_secret)
@@ -28,7 +27,6 @@ class PingView(View):
 
 class DbView(View):
     def get(self, request):
-        # mínimo intento de conexión a la base de datos
         try:
             connection.cursor()
             return HttpResponse("Conectado")
@@ -38,9 +36,7 @@ class DbView(View):
 
 class DatabaseInfoView(View):
     def get(self, request):
-        # Obtener información de la base de datos
         try:
-            # Intentar establecer una conexión explícita
             with connection.cursor() as cursor:
                 cursor.execute("SELECT version();")
                 db_version = cursor.fetchone()[0]
@@ -63,7 +59,6 @@ class DatabaseInfoView(View):
             }
             db_status = "Error de conexión"
         
-        # Obtener UDNs de la base de datos con información detallada
         try:
             udns = UDN.objects.prefetch_related('permission_group', 'groups').all()
             udns_list = []
@@ -82,7 +77,6 @@ class DatabaseInfoView(View):
             udns_text = f"Error al obtener UDNs: {str(e)}"
             udns_count = 0
         
-        # Obtener el valor de PING del secreto
         ping_secret = os.getenv('PING', '{}')
         try:
             ping_data = json.loads(ping_secret)
