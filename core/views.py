@@ -26,6 +26,16 @@ class PingView(View):
             return HttpResponse("Pong")
 
 
+class DbView(View):
+    def get(self, request):
+        # mínimo intento de conexión a la base de datos
+        try:
+            connection.cursor()
+            return HttpResponse("Conectado")
+        except Exception as e:
+            return HttpResponse(f"Error: {str(e)}")
+
+
 class DatabaseInfoView(View):
     def get(self, request):
         # Obtener información de la base de datos
