@@ -22,21 +22,13 @@ run:
       value: "True"
     - name: CSRF_TRUSTED_ORIGINS
       value: "https://nqya523khr.us-east-1.awsapprunner.com"
-    - name: POSTGRES_DB
-      value: "welpdesk"
-    - name: POSTGRES_USER
-      value: "welpdesk"
-    - name: POSTGRES_HOST
-      value: "virginia-db.cccpxuiv6n1v.us-east-1.rds.amazonaws.com"
-    - name: POSTGRES_PORT
-      value: "5432"
   secrets:
     - name: PING
       value-from: "arn:aws:secretsmanager:us-east-1:789650504128:secret:pingping/secret-VcQsw5"
     - name: SECRET_KEY
       value-from: "arn:aws:secretsmanager:us-east-1:789650504128:secret:apprunner/welpdesk-TH2uVH"
-    - name: POSTGRES_PASSWORD
-      value-from: "arn:aws:secretsmanager:us-east-1:789650504128:secret:apprunner/welpdesk-TH2uVH"
     - name: MS_GRAPH_CLIENT_SECRET
       value-from: "arn:aws:secretsmanager:us-east-1:789650504128:secret:apprunner/welpdesk-TH2uVH"
+    - name: WELPDESK_DB_CONNECTOR
+      value-from: "arn:aws:secretsmanager:us-east-1:789650504128:secret:welpdesk_db_connector-j5YRtp"
 

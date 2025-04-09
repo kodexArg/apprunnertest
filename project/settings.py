@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 import sys
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -57,10 +58,18 @@ WSGI_APPLICATION = 'project.wsgi.application'
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.dummy',
+#     }
+# }
+
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.dummy',
-    }
+    'default': dj_database_url.config(
+        default=os.getenv('WELPDESK_DB_CONNECTOR'),
+        conn_max_age=600
+    )
 }
 
 
