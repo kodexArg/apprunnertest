@@ -5,6 +5,7 @@ from django.db import connection
 from django.conf import settings
 import os
 import json
+import django
 from .models import UDN
 
 
@@ -13,16 +14,28 @@ class HelloWorldView(View):
         return HttpResponse("Hello World")
 
 
+class PingView(View):
+    def get(self, request):
+        # Obtener el valor de PING del secreto
+        ping_secret = os.getenv('PING', '{}')
+        try:
+            ping_data = json.loads(ping_secret)
+            ping_value = ping_data.get('PING', 'Pong')
+            return HttpResponse(ping_value)
+        except json.JSONDecodeError:
+            return HttpResponse("Pong")
+
+
 class DatabaseInfoView(View):
     def get(self, request):
         # Obtener información de la base de datos
         try:
             db_info = {
-                'db_name': connection.settings_dict['NAME'],
-                'db_host': connection.settings_dict['HOST'],
-                'db_port': connection.settings_dict['PORT'],
-                'db_user': connection.settings_dict['USER'],
-                'db_engine': connection.settings_dict['ENGINE'],
+                'db_name': connection.settings_dict.get('NAME', 'No disponible'),
+                'db_host': connection.settings_dict.get('HOST', 'No disponible'),
+                'db_port': connection.settings_dict.get('PORT', 'No disponible'),
+                'db_user': connection.settings_dict.get('USER', 'No disponible'),
+                'db_engine': connection.settings_dict.get('ENGINE', 'No disponible'),
                 'db_options': connection.settings_dict.get('OPTIONS', {}),
             }
             db_status = "Conectada"
@@ -96,7 +109,7 @@ class DatabaseInfoView(View):
             <pre>
             Base de datos: <span class="{'status-ok' if db_status == 'Conectada' else 'status-error'}">{db_status}</span>
             Modo: {settings.DEBUG and 'Desarrollo' or 'Producción'}
-            Django: {settings.DJANGO_VERSION}
+            Django: {django.get_version()}
             </pre>
         </body>
         </html>
