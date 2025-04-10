@@ -13,7 +13,7 @@ run:
   pre-run:
     - pip3 install pipenv
     - pipenv install
-  command: pipenv run gunicorn project.wsgi:application --bind 0.0.0.0:$PORT --log-level debug -t 120
+  command: pipenv run gunicorn project.wsgi:application --bind 0.0.0.0:$PORT --log-level debug -t 240 --workers 2 --threads 4
   network:
     port: 8080
     env: PORT
