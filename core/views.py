@@ -6,7 +6,10 @@ from django.conf import settings
 import os
 import json
 import django
+import logging
 from .models import UDN
+
+logger = logging.getLogger(__name__)
 
 
 class HelloWorldView(View):
@@ -27,10 +30,26 @@ class PingView(View):
 
 class DbView(View):
     def get(self, request):
+        logger.info("Iniciando verificación de conexión a base de datos")
         try:
-            connection.cursor()
+            logger.debug("Intentando establecer conexión con la base de datos")
+            with connection.cursor() as cursor:
+                logger.debug("Conexión establecida, ejecutando consulta de prueba")
+                cursor.execute("SELECT 1")
+                result = cursor.fetchone()
+                logger.info(f"Consulta de prueba exitosa. Resultado: {result}")
+                
+                # Obtener información de la conexión
+                db_settings = connection.settings_dict
+                logger.debug(f"Configuración de base de datos: {db_settings}")
+                
+                # Verificar si hay UDNs en la base de datos
+                udn_count = UDN.objects.count()
+                logger.info(f"Número de UDNs en la base de datos: {udn_count}")
+                
             return HttpResponse("Conectado")
         except Exception as e:
+            logger.error(f"Error al conectar con la base de datos: {str(e)}", exc_info=True)
             return HttpResponse(f"Error: {str(e)}")
 
 
