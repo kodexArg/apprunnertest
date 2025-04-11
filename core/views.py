@@ -47,7 +47,32 @@ class DbView(View):
                 udn_count = UDN.objects.count()
                 logger.info(f"Número de UDNs en la base de datos: {udn_count}")
                 
-            return HttpResponse("Conectado")
+            # Obtener la variable DJANGO_SECRET_KEY
+            django_secret_key = os.getenv('DJANGO_SECRET_KEY', 'No disponible')
+            secret_key_source = "apprunner.yaml (secrets)"
+                
+            response = f"""
+            <html>
+            <head>
+                <style>
+                    body {{ font-family: Arial, sans-serif; margin: 20px; }}
+                    pre {{ background-color: #f5f5f5; padding: 10px; border-radius: 5px; }}
+                    .secret-info {{ margin-top: 20px; }}
+                </style>
+            </head>
+            <body>
+                <h2>Estado de la Base de Datos:</h2>
+                <pre>Conectado</pre>
+                
+                <div class="secret-info">
+                    <h2>DJANGO_SECRET_KEY:</h2>
+                    <pre>Valor: {django_secret_key}
+Origen: {secret_key_source}</pre>
+                </div>
+            </body>
+            </html>
+            """
+            return HttpResponse(response)
         except Exception as e:
             logger.error(f"Error al conectar con la base de datos: {str(e)}", exc_info=True)
             return HttpResponse(f"Error: {str(e)}")

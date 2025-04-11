@@ -5,25 +5,7 @@ from django.urls import reverse
 
 
 class UDN(models.Model):
-    """
-    Unidad de Negocio (UDN) representa divisiones principales como sucursales o departamentos.
-    
-    Relaciones con grupos:
-    - permission_group: Grupos con permisos administrativos sobre esta UDN (ej. "Administrative", "Administrativo").
-      Estos grupos pueden gestionar la UDN desde el panel de administración.
-    - groups: Grupos específicos asociados a esta UDN (ej. "UDN Km 1151", "UDN Las Bóvedas").
-      Los usuarios en estos grupos pueden ver tickets de esta UDN.
-    
-    Ejemplo:
-        udn_oficina = UDN.objects.get(name="Oficina Central")
-        # Dar permiso administrativo al grupo "Administrative"
-        admin_group = Group.objects.get(name="Administrative")
-        udn_oficina.permission_group.add(admin_group)
-        
-        # Asociar el grupo específico "UDN Oficina Central"
-        udn_group = Group.objects.get(name="UDN Oficina Central")
-        udn_oficina.groups.add(udn_group)
-    """
+
     name = models.CharField(max_length=255, verbose_name="Nombre")
     permission_group = models.ManyToManyField(Group, blank=True, related_name="udn_permissions", verbose_name="Grupos de Permisos")
     groups = models.ManyToManyField(Group, related_name='udns', blank=True)
