@@ -4,10 +4,17 @@ Configuración de Django para el proyecto.
 Variables de entorno requeridas:
 DJANGO_SECRET_KEY: Clave secreta para firmar datos criptográficos (ej: 'django-insecure-1234567890abcdefghijklmnopqrstuvwxyz')
 DJANGO_DEBUG: Indica si el modo de depuración está activado (ej: 'False' para producción, 'True' para desarrollo)
-APP_RUNNER_HOST: Host específico de App Runner (ej: 'myapp.1234567890.region.apprunner.aws.a2z.com')
-CSRF_TRUSTED_ORIGINS: Orígenes confiables para CSRF, separados por comas (ej: 'https://myapp.1234567890.region.apprunner.aws.a2z.com')
+
+# Configuración de App Runner
+APP_RUNNER_SUBDOMAIN: Subdominio asignado por App Runner (ej: 'nqya523khr')
+APP_RUNNER_REGION: Región de App Runner (ej: 'us-east-1')
+APP_RUNNER_DOMAIN: Dominio base de App Runner (ej: 'awsapprunner.com')
+
+# Configuración de base de datos
 DATABASE_URL o WELPDESK_DB_CONNECTOR: URL de conexión a la base de datos (ej: 'postgres://usuario:contraseña@host:5432/nombre_db')
-AWS_STORAGE_BUCKET_NAME: Nombre del bucket de S3 para almacenamiento (ej: 'mi-aplicacion-bucket')
+
+# Configuración de AWS S3
+AWS_STORAGE_BUCKET_NAME: Nombre del bucket de S3 para almacenamiento (ej: 'alvs-virginia-s3')
 AWS_REGION_NAME: Región de AWS para S3 (ej: 'us-east-1')
 AWS_S3_CUSTOM_DOMAIN: Dominio personalizado para CloudFront, opcional (ej: 'd1234567890.cloudfront.net')
 """
@@ -22,10 +29,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = os.getenv('DJANGO_DEBUG', 'False').lower() in ('true', '1', 't')
 
-APP_RUNNER_HOST = os.getenv('APP_RUNNER_HOST')
-ALLOWED_HOSTS = [APP_RUNNER_HOST] if APP_RUNNER_HOST else ['localhost', '127.0.0.1']
+# Configuración de App Runner
+APP_RUNNER_SUBDOMAIN = os.getenv('APP_RUNNER_SUBDOMAIN')
+APP_RUNNER_REGION = os.getenv('APP_RUNNER_REGION')
+APP_RUNNER_DOMAIN = os.getenv('APP_RUNNER_DOMAIN')
 
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
+# Construir el host completo de App Runner
+APP_RUNNER_HOST = f"{APP_RUNNER_SUBDOMAIN}.{APP_RUNNER_REGION}.{APP_RUNNER_DOMAIN}" if all([APP_RUNNER_SUBDOMAIN, APP_RUNNER_REGION, APP_RUNNER_DOMAIN]) else None
+
+# Configurar ALLOWED_HOSTS
+ALLOWED_HOSTS = [f".{APP_RUNNER_DOMAIN}"] if APP_RUNNER_DOMAIN else ['localhost', '127.0.0.1']
+
+# Construir CSRF_TRUSTED_ORIGINS
+CSRF_TRUSTED_ORIGINS = [f"https://{APP_RUNNER_HOST}"] if APP_RUNNER_HOST else []
 
 INSTALLED_APPS = [
     'django.contrib.admin',

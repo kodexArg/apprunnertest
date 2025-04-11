@@ -18,10 +18,23 @@ run:
     port: 8080
     env: PORT
   env:
+    # Configuración básica de Django
     - name: DJANGO_DEBUG
       value: "True"
-    - name: CSRF_TRUSTED_ORIGINS
-      value: "https://nqya523khr.us-east-1.awsapprunner.com"
+    
+    # Configuración de App Runner
+    - name: APP_RUNNER_SUBDOMAIN
+      value: "nqya523khr"
+    - name: APP_RUNNER_REGION
+      value: "us-east-1"
+    - name: APP_RUNNER_DOMAIN
+      value: "awsapprunner.com"
+    
+    # Configuración de AWS S3
+    - name: AWS_STORAGE_BUCKET_NAME
+      value: "alvs-virginia-s3"
+    - name: AWS_REGION_NAME
+      value: "us-east-1"
   secrets:
     - name: PING
       value-from: "arn:aws:secretsmanager:us-east-1:789650504128:secret:pingping/secret-VcQsw5"
