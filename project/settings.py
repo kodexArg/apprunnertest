@@ -1,23 +1,5 @@
-"""
-Configuración de Django para el proyecto.
-
-Variables de entorno requeridas:
-DJANGO_SECRET_KEY: Clave secreta para firmar datos criptográficos (ej: 'django-insecure-1234567890abcdefghijklmnopqrstuvwxyz')
-DJANGO_DEBUG: Indica si el modo de depuración está activado (ej: 'False' para producción, 'True' para desarrollo)
-
-# Configuración de App Runner
-APP_RUNNER_SUBDOMAIN: Subdominio asignado por App Runner (ej: 'nqya523khr')
-APP_RUNNER_REGION: Región de App Runner (ej: 'us-east-1')
-APP_RUNNER_DOMAIN: Dominio base de App Runner (ej: 'awsapprunner.com')
-
-# Configuración de base de datos
-DATABASE_URL o WELPDESK_DB_CONNECTOR: URL de conexión a la base de datos (ej: 'postgres://usuario:contraseña@host:5432/nombre_db')
-
-# Configuración de AWS S3
-AWS_STORAGE_BUCKET_NAME: Nombre del bucket de S3 para almacenamiento (ej: 'alvs-virginia-s3')
-AWS_REGION_NAME: Región de AWS para S3 (ej: 'us-east-1')
-AWS_S3_CUSTOM_DOMAIN: Dominio personalizado para CloudFront, opcional (ej: 'd1234567890.cloudfront.net')
-"""
+import boto3
+from botocore.auth import SigV4Auth
 
 from pathlib import Path
 import os
@@ -105,46 +87,51 @@ USE_I18N = True
 USE_TZ = True
 
 if not DEBUG:
-    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
-    AWS_REGION_NAME = os.getenv('AWS_REGION_NAME', 'us-east-1')
-    AWS_S3_CUSTOM_DOMAIN = os.getenv('AWS_S3_CUSTOM_DOMAIN')
 
-    AWS_ACCESS_KEY_ID = None  # Use instance role
-    AWS_SECRET_ACCESS_KEY = None  # Use instance role
-
-    AWS_DEFAULT_ACL = None  # Use bucket policy
+    S3_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME')
+    S3_REGION = os.environ.get('S3_REGION', 'us-east-1')
     AWS_S3_SIGNATURE_VERSION = 's3v4'
+
     AWS_S3_FILE_OVERWRITE = False
     AWS_S3_VERIFY = True
-
-    AWS_LOCATION_STATIC = 'static'
+    AWS_LOCATION_STATIC = 'static'  # Default location for static files
     AWS_LOCATION_MEDIA = 'media'
-
+    
     STORAGES = {
-        "default": {
-            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
-            "OPTIONS": {
-                "bucket_name": AWS_STORAGE_BUCKET_NAME,
-                "location": AWS_LOCATION_MEDIA,
-                "file_overwrite": AWS_S3_FILE_OVERWRITE,
+        'default': {
+            'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage',
+            'OPTIONS': {
+                'bucket_name': S3_BUCKET_NAME,
+                'location': AWS_LOCATION_MEDIA,
+                'file_overwrite': AWS_S3_FILE_OVERWRITE,
+                'config': {
+                    'signature_version': AWS_S3_SIGNATURE_VERSION,
+                    's3': {
+                        'addressing_style': 'virtual',
+                    },
+                },
+                'session': boto3.session.Session(region_name=S3_REGION) if S3_REGION else None,
             },
         },
-        "staticfiles": {
-            "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
-            "OPTIONS": {
-                "bucket_name": AWS_STORAGE_BUCKET_NAME,
-                "location": AWS_LOCATION_STATIC,
-                "file_overwrite": True,
+        'staticfiles': {
+            'BACKEND': 'storages.backends.s3boto3.S3StaticStorage',
+            'OPTIONS': {
+                'bucket_name': S3_BUCKET_NAME,
+                'location': AWS_LOCATION_STATIC,
+                'file_overwrite': False,
+                'config': {
+                    'signature_version': AWS_S3_SIGNATURE_VERSION,
+                    's3': {
+                        'addressing_style': 'virtual',
+                    },
+                },
+                'session': boto3.session.Session(region_name=S3_REGION) if S3_REGION else None,
             },
         },
     }
 
-    if AWS_S3_CUSTOM_DOMAIN:
-        STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION_STATIC}/"
-        MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION_MEDIA}/"
-    else:
-        STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_REGION_NAME}.amazonaws.com/{AWS_LOCATION_STATIC}/"
-        MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_REGION_NAME}.amazonaws.com/{AWS_LOCATION_MEDIA}/"
+    STATIC_URL = f"https://{S3_BUCKET_NAME}.s3.{S3_REGION}.amazonaws.com/{AWS_LOCATION_STATIC}/"  # Updated this line
+    MEDIA_URL = f"https://{S3_BUCKET_NAME}.s3.{S3_REGION}.amazonaws.com/{AWS_LOCATION_MEDIA}/"  # Updated this line
 else:
     STATIC_URL = '/static/'
     MEDIA_URL = '/media/'

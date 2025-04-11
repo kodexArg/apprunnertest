@@ -24,6 +24,7 @@ This project is automatically deployed to AWS App Runner (us-east-1) with each p
 *   **django-signals:** Add tests for `django-signals` to handle asynchronous events within the application.
 *   **Async Operations:** Explore non-blocking I/O practices in Django. (Note: "Async" is not the conventional term in Django; it refers to asynchronous tasks, potentially managed by Celery or similar).
 
+
 ## AI Guidance
 
 This README.md serves as the primary context for AI interactions with this project. When modifying or adding code, please adhere to the following:
@@ -34,3 +35,21 @@ This README.md serves as the primary context for AI interactions with this proje
 *   **Selected Content:** When using `selected_content`, add any necessary imports at the beginning of the file, following PEP 8. Extending the selection is allowed if needed.
 *   **Keep it simple:** Keep the code as simple as possible.
 *   **Secure:** Do not write any key nor secret, never. Ask for environment variables creation instead.
+
+## Environment Variables
+
+*   `PORT`: The port on which the application will listen for requests.
+*   `DJANGO_SETTINGS_MODULE`: Specifies the Django settings module (e.g., `project.settings`).
+*   `APP_RUNNER_SUBDOMAIN`: Subdomain assigned by App Runner.
+*   `APP_RUNNER_REGION`: Region of App Runner.
+*   `APP_RUNNER_DOMAIN`: Base domain of App Runner.
+*   `S3_BUCKET_NAME`: The name of the S3 bucket used for static file storage (e.g., `alvs-virginia-s3`).
+*   `S3_REGION`: The AWS region where the S3 bucket is located (e.g., `us-east-1`).
+
+## Secrets
+*   `DJANGO_SECRET_KEY`: The Django secret key for cryptographic signing. Stored in AWS Secrets Manager.
+*   `PING`: Secret used for healtchecks. Stored in AWS Secrets Manager.
+*   `MS_GRAPH_CLIENT_SECRET`: Secret used to connect to Microsoft Graph. Stored in AWS Secrets Manager.
+*   `WELPDESK_DB_CONNECTOR`: Secret used to connect to the database. Stored in AWS Secrets Manager.
+
+This project uses an App Runner instance role for S3 access and therefore does not require explicit S3 credentials.
