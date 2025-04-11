@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 class HelloWorldView(View):
     def get(self, request):
-        return HttpResponse("Hello World")
+        return render(request, 'home.html')
 
 
 class PingView(View):
