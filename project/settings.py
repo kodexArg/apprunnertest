@@ -127,6 +127,8 @@ if USE_S3:
     }
 
     STATIC_URL = f"https://{S3_BUCKET_NAME}.s3.{S3_REGION}.amazonaws.com/{AWS_LOCATION_STATIC}/"  # Updated this line
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
     MEDIA_URL = f"https://{S3_BUCKET_NAME}.s3.{S3_REGION}.amazonaws.com/{AWS_LOCATION_MEDIA}/"  # Updated this line
 else:
 
