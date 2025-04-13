@@ -119,7 +119,6 @@ if not DEBUG:
                 'file_overwrite': False,
                 'signature_version': AWS_S3_SIGNATURE_VERSION,
                 'addressing_style': 'virtual',
-                'session': boto3.session.Session(region_name=S3_REGION) if S3_REGION else None,
             },
         },
     }
