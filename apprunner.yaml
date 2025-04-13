@@ -3,9 +3,10 @@ runtime: python311
 build:
   commands:
     build:
-      - pip3 install pipenv
-      - pipenv install
-      - pipenv run python manage.py collectstatic --noinput && ls -la static
+        - pip3 install pipenv
+        - pipenv install
+    
+
   env:
     - name: S3_BUCKET_NAME
       value: "alvs-virginia-s3"
@@ -17,8 +18,9 @@ build:
       value: "project.settings"
 run:
   pre-run:
-    - pip3 install pipenv
-    - pipenv install
+    - pipenv run python manage.py collectstatic --noinput
+    
+    
   command: pipenv run gunicorn project.wsgi:application --bind 0.0.0.0:$PORT --log-level debug -t 240 --workers 2 --threads 4
   network:
     port: 8080
