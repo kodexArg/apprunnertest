@@ -101,7 +101,7 @@ if not DEBUG:
         'default': {
             'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage',
             'OPTIONS': {
-                'bucket_name': S3_BUCKET_NAME,
+                'bucket_name': os.environ.get('S3_BUCKET_NAME'),
                 'location': AWS_LOCATION_MEDIA,
                 'file_overwrite': AWS_S3_FILE_OVERWRITE,
                 'signature_version': AWS_S3_SIGNATURE_VERSION,
@@ -114,7 +114,7 @@ if not DEBUG:
         'staticfiles': {
             'BACKEND': 'storages.backends.s3boto3.S3StaticStorage',
             'OPTIONS': {
-                'bucket_name': S3_BUCKET_NAME,
+                'bucket_name': os.environ.get('S3_BUCKET_NAME'),
                 'location': AWS_LOCATION_STATIC,
                 'file_overwrite': False,
                 'signature_version': AWS_S3_SIGNATURE_VERSION,
