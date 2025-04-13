@@ -7,6 +7,12 @@ build:
       - pipenv install
       - pipenv run python manage.py collectstatic --noinput && ls -la static
   env:
+    - name: S3_BUCKET_NAME
+      value: "alvs-virginia-s3"
+    - name: S3_REGION
+      value: "us-east-1"
+
+
     - name: DJANGO_SETTINGS_MODULE
       value: "project.settings"
 run:
