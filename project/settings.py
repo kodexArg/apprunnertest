@@ -106,7 +106,7 @@ if not DEBUG:
                 'file_overwrite': AWS_S3_FILE_OVERWRITE,
                 'signature_version': AWS_S3_SIGNATURE_VERSION,
                 'addressing_style': 'virtual',
-                'session': boto3.session.Session(region_name=S3_REGION) if S3_REGION else None,
+                'session': boto3.session.Session(region_name=os.environ.get('S3_REGION')) if os.environ.get('S3_REGION') else None,
             },
 
 
