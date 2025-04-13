@@ -11,6 +11,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = os.getenv('DJANGO_DEBUG', 'False').lower() in ('true', '1', 't')
 
+USE_S3 = os.getenv('USE_S3', 'False').lower() in ('true', '1', 't')
+
 # Configuración de App Runner
 APP_RUNNER_SUBDOMAIN = os.getenv('APP_RUNNER_SUBDOMAIN')
 APP_RUNNER_REGION = os.getenv('APP_RUNNER_REGION')
@@ -86,27 +88,27 @@ TIME_ZONE = 'America/Argentina/Buenos_Aires'
 USE_I18N = True
 USE_TZ = True
 
-if not DEBUG:
+S3_REGION = os.getenv('S3_REGION', 'us-east-1')
 
-    S3_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME')
-    S3_REGION = os.environ.get('S3_REGION', 'us-east-1')
+if USE_S3:
+    S3_BUCKET_NAME = os.getenv('S3_BUCKET_NAME')
     AWS_S3_SIGNATURE_VERSION = 's3v4'
 
     AWS_S3_FILE_OVERWRITE = False
     AWS_S3_VERIFY = True
     AWS_LOCATION_STATIC = 'static'  # Default location for static files
     AWS_LOCATION_MEDIA = 'media'
-    
+
     STORAGES = {
         'default': {
             'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage',
             'OPTIONS': {
-                'bucket_name': os.environ.get('S3_BUCKET_NAME'),
+                'bucket_name': S3_BUCKET_NAME,
                 'location': AWS_LOCATION_MEDIA,
                 'file_overwrite': AWS_S3_FILE_OVERWRITE,
                 'signature_version': AWS_S3_SIGNATURE_VERSION,
                 'addressing_style': 'virtual',
-                'session': boto3.session.Session(region_name=os.environ.get('S3_REGION')) if os.environ.get('S3_REGION') else None,
+                'session': boto3.session.Session(region_name=S3_REGION),
             },
 
 
@@ -114,18 +116,20 @@ if not DEBUG:
         'staticfiles': {
             'BACKEND': 'storages.backends.s3boto3.S3StaticStorage',
             'OPTIONS': {
-                'bucket_name': os.environ.get('S3_BUCKET_NAME'),
+                'bucket_name': S3_BUCKET_NAME,
                 'location': AWS_LOCATION_STATIC,
                 'file_overwrite': False,
                 'signature_version': AWS_S3_SIGNATURE_VERSION,
                 'addressing_style': 'virtual',
             },
         },
+
     }
 
     STATIC_URL = f"https://{S3_BUCKET_NAME}.s3.{S3_REGION}.amazonaws.com/{AWS_LOCATION_STATIC}/"  # Updated this line
     MEDIA_URL = f"https://{S3_BUCKET_NAME}.s3.{S3_REGION}.amazonaws.com/{AWS_LOCATION_MEDIA}/"  # Updated this line
 else:
+
     STATIC_URL = '/static/'
     MEDIA_URL = '/media/'
 

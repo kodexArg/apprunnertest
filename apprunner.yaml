@@ -10,6 +10,8 @@ build:
         - pipenv run python manage.py makemigrations
         - pipenv run python manage.py migrate
     
+    
+
 
   env:
     - name: S3_BUCKET_NAME
@@ -44,6 +46,8 @@ run:
       value: "alvs-virginia-s3"
     - name: S3_REGION
       value: "us-east-1"
+    - name: USE_S3
+      value: "true"
     
   secrets:
     - name: PING
