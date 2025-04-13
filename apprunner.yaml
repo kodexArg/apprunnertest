@@ -18,6 +18,7 @@ build:
       value: "project.settings"
 run:
   pre-run:
+    - pipenv install
     - pipenv run python manage.py collectstatic --noinput
     
     
