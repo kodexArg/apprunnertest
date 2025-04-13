@@ -104,14 +104,12 @@ if not DEBUG:
                 'bucket_name': S3_BUCKET_NAME,
                 'location': AWS_LOCATION_MEDIA,
                 'file_overwrite': AWS_S3_FILE_OVERWRITE,
-                'config': {
-                    'signature_version': AWS_S3_SIGNATURE_VERSION,
-                    's3': {
-                        'addressing_style': 'virtual',
-                    },
-                },
+                'signature_version': AWS_S3_SIGNATURE_VERSION,
+                'addressing_style': 'virtual',
                 'session': boto3.session.Session(region_name=S3_REGION) if S3_REGION else None,
             },
+
+
         },
         'staticfiles': {
             'BACKEND': 'storages.backends.s3boto3.S3StaticStorage',
@@ -119,12 +117,8 @@ if not DEBUG:
                 'bucket_name': S3_BUCKET_NAME,
                 'location': AWS_LOCATION_STATIC,
                 'file_overwrite': False,
-                'config': {
-                    'signature_version': AWS_S3_SIGNATURE_VERSION,
-                    's3': {
-                        'addressing_style': 'virtual',
-                    },
-                },
+                'signature_version': AWS_S3_SIGNATURE_VERSION,
+                'addressing_style': 'virtual',
                 'session': boto3.session.Session(region_name=S3_REGION) if S3_REGION else None,
             },
         },
