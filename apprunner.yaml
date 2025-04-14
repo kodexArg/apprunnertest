@@ -3,9 +3,7 @@ runtime: python311
 build:
   commands:
     build:
-      - pip3 install pipenv
-      - pipenv install
-      - pipenv run pip install -r requirements.txt
+      - pip3 install -r requirements.txt
   env:    
     - name: S3_BUCKET_NAME
       value: "alvs-virginia-s3"
@@ -14,8 +12,6 @@ build:
 run:
   runtime-version: 3.11
   pre-run:
-    - pip3 install pipenv    
-    - pipenv install    
     - python3 manage.py collectstatic --noinput
     - python3 manage.py makemigrations
     - python3 manage.py migrate
