@@ -2,7 +2,6 @@ import boto3
 from botocore.auth import SigV4Auth
 
 from pathlib import Path
-
 import os
 import sys
 import dj_database_url
@@ -71,9 +70,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
-print(">", os.getenv('WELPDESK_DB_CONNECTOR'))
+print(">", os.getenv('DATABASE_URL'))
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('WELPDESK_DB_CONNECTOR'), conn_max_age=600, conn_health_checks=True)
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'), conn_max_age=600, conn_health_checks=True)
 
 }
 
