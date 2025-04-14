@@ -18,6 +18,7 @@ build:
 
 run:
   pre-run:
+    - pip3 install -r requirements.txt
     - python3 manage.py migrate --noinput
   
   command: gunicorn project.wsgi:application --bind 0.0.0.0:$PORT --log-level debug -t 240 --workers 2 --threads 4
