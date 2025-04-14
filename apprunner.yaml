@@ -4,7 +4,7 @@ build:
   commands:
     build:
       - pip3 install pipenv
-      - pipenv install --deploy --ignore-pipfile
+      - pipenv install --deploy
       - pipenv run python manage.py collectstatic --noinput
     post-build:
       - pipenv run python manage.py test
