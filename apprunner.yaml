@@ -1,17 +1,34 @@
 version: 1.0
 runtime: python311
-run:
-  pre-run:
-    - pip3 install -r requirements.txt
-    - python3 manage.py collectstatic --noinput
-    - python3 manage.py makemigrations
-    - python3 manage.py migrate
+build:
+  commands:
+    build:
+      - pip3 install pipenv
+      - pipenv install --deploy --ignore-pipfile
+      - pipenv run python manage.py collectstatic --noinput
+    post-build:
+      - pipenv run python manage.py test
 
-  command: python3 manage.py migrate && python3 manage.py collectstatic --noinput && gunicorn project.wsgi:application --bind 0.0.0.0:$PORT --log-level debug -t 240 --workers 2 --threads 4
-  network:        
+  env:
+    - name: DJANGO_SETTINGS_MODULE
+      value: "project.settings"
+    - name: AWS_STORAGE_BUCKET_NAME
+      value: "alvs-virginia-s3"
+    - name: AWS_S3_REGION_NAME
+      value: "us-east-1"
+    - name: DJANGO_DEBUG
+      value: "False"
+
+run:
+  command: bash startup.sh
+
+  network:
     port: 8080
     env: PORT
+
   env:
+    - name: DJANGO_SETTINGS_MODULE
+      value: "project.settings"
     - name: DJANGO_DEBUG
       value: "True"
     - name: APP_RUNNER_SUBDOMAIN
@@ -20,14 +37,13 @@ run:
       value: "us-east-1"
     - name: APP_RUNNER_DOMAIN
       value: "awsapprunner.com"
-    - name: S3_BUCKET_NAME
+    - name: AWS_STORAGE_BUCKET_NAME
       value: "alvs-virginia-s3"
-    - name: S3_REGION
+    - name: AWS_S3_REGION_NAME
       value: "us-east-1"
     - name: USE_S3
       value: "true"
-    - name: DJANGO_SETTINGS_MODULE
-      value: "project.settings"
+
   secrets:
     - name: PING
       value-from: "arn:aws:secretsmanager:us-east-1:789650504128:secret:pingping/secret-VcQsw5"
@@ -36,4 +52,4 @@ run:
     - name: MS_GRAPH_CLIENT_SECRET
       value-from: "arn:aws:secretsmanager:us-east-1:789650504128:secret:apprunner/welpdesk-TH2uVH"
     - name: WELPDESK_DB_CONNECTOR
-      value-from: "arn:aws:secretsmanager:us-east-1:789650504128:secret:welpdesk_db_connector-j5YRtp" 
+      value-from: "arn:aws:secretsmanager:us-east-1:789650504128:secret:welpdesk_db_connector-j5YRtp"
