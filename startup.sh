@@ -1,12 +1,8 @@
 #!/bin/bash
 
-# Set environment variables if needed
-export DJANGO_SETTINGS_MODULE=project.settings
-export PYTHONUNBUFFERED=1
-
 # Install dependencies
-pip3 install pipenv
-pipenv install --system --deploy --ignore-pipfile
+# pip3 install pipenv
+# pipenv install --system --deploy --ignore-pipfile
 
 # Collect static files
 pipenv run python3 manage.py collectstatic --noinput
