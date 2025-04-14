@@ -1,17 +1,9 @@
 version: 1.0
 runtime: python311
-build:
-  commands:
-    build:
-      - pip3 install -r requirements.txt
-  env:    
-    - name: S3_BUCKET_NAME
-      value: "alvs-virginia-s3"
-    - name: S3_REGION
-      value: "us-east-1"
 run:
   runtime-version: 3.11
   pre-run:
+    - pip3 install -r requirements.txt
     - python3 manage.py collectstatic --noinput
     - python3 manage.py makemigrations
     - python3 manage.py migrate
