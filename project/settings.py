@@ -12,8 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = os.getenv('DJANGO_DEBUG', 'False').lower() in ('true', '1', 't')
 
-print(os.getenv('PONG'))
-print(os.environ.get('DATABASE_URL'))
+print(">", os.getenv('PONG'))
 
 USE_S3 = os.getenv('USE_S3', 'False').lower() in ('true', '1', 't')
 
@@ -72,9 +71,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
+print(">", os.getenv('WELPDESK_DB_CONNECTOR'))
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'), conn_max_age=600, conn_health_checks=True),
-    
+    'default': dj_database_url.config(default=os.getenv('WELPDESK_DB_CONNECTOR'), conn_max_age=600, conn_health_checks=True)
+
 }
 
 AUTH_PASSWORD_VALIDATORS = [
