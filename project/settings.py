@@ -13,6 +13,8 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = os.getenv('DJANGO_DEBUG', 'False').lower() in ('true', '1', 't')
 
 print(os.getenv('PONG'))
+print(os.environ.get('DATABASE_URL'))
+
 USE_S3 = os.getenv('USE_S3', 'False').lower() in ('true', '1', 't')
 
 # Configuración de App Runner
