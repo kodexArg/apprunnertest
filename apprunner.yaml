@@ -4,11 +4,13 @@ build:
   commands:
     build:
       - echo "<--- Build phase No runtime dependencies installed here --->"
+
 run:
   pre-run:
     - echo "<--- Run phase Installing runtime dependencies --->"
     - pip3 install --no-cache-dir -r requirements.txt
     - echo "<--- Run phase Done --->"
+
   command: sh startup.sh
   network:
     port: 8080
@@ -21,6 +23,10 @@ run:
       value: "project.settings"
     - name: DJANGO_DEBUG
       value: "False"
+    - name: ALLOWED_HOSTS
+      value: ".awsapprunner.com"
+    - name: CSRF_TRUSTED_ORIGINS
+      value: "https://*.awsapprunner.com"
     - name: APP_RUNNER_SUBDOMAIN
       value: "nqya523khr"
     - name: APP_RUNNER_REGION
@@ -33,6 +39,10 @@ run:
       value: "us-east-1"
     - name: USE_S3
       value: "true"
+    - name: AWS_ACCESS_KEY_ID
+      value: ""
+    - name: AWS_SECRET_ACCESS_KEY
+      value: ""
 
   secrets:
     - name: PING
