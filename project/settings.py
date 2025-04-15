@@ -100,30 +100,28 @@ if USE_S3:
     AWS_LOCATION_MEDIA = 'media'
 
     STORAGES = {
-        'default': {
-            'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage',
-            'OPTIONS': {
-                'bucket_name': S3_BUCKET_NAME,
-                'location': AWS_LOCATION_MEDIA,
-                'file_overwrite': AWS_S3_FILE_OVERWRITE,
-                'signature_version': AWS_S3_SIGNATURE_VERSION,
-                'addressing_style': 'virtual',
-                'session': boto3.session.Session(region_name=S3_REGION),
-            },
-
-
-        },
-        'staticfiles': {
-            'BACKEND': 'storages.backends.s3boto3.S3StaticStorage',
-            'OPTIONS': {
-                'bucket_name': S3_BUCKET_NAME,
-                'location': AWS_LOCATION_STATIC,
-                'file_overwrite': False,
-                'signature_version': AWS_S3_SIGNATURE_VERSION,
-                'addressing_style': 'virtual',
+        "default": {
+            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+            "OPTIONS": {
+                "access_key": None,
+                "secret_key": None,
+                "bucket_name": os.environ.get("AWS_S3_BUCKET_NAME"),
+                "region_name": os.environ.get("AWS_S3_REGION_NAME"),
+                "location": "static",
+                "default_acl": "public-read",
             },
         },
-
+        "staticfiles": {
+            "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
+            "OPTIONS": {
+                "access_key": None,
+                "secret_key": None,
+                "bucket_name": os.environ.get("AWS_S3_BUCKET_NAME"),
+                "region_name": os.environ.get("AWS_S3_REGION_NAME"),
+                "location": "static",
+                "default_acl": "public-read",
+            },
+        },
     }
 
     STATIC_URL = f"https://{S3_BUCKET_NAME}.s3.{S3_REGION}.amazonaws.com/{AWS_LOCATION_STATIC}/"  # Updated this line

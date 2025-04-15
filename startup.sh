@@ -1,11 +1,19 @@
-#!/bin/sh
-set -e
+#!/bin/bash
+
+# Install dependencies
+pip3 install pipenv
+pipenv install --system --deploy --ignore-pipfile
+
+# print virtualenv, pipenv, freeze
+echo "Virtualenv: $(which python3)"
+echo "Pipenv: $(pipenv --version)"
+echo "Freeze: $(pipenv freeze)"
 
 # Collect static files
-python3 manage.py collectstatic --noinput
+pipenv run python3 manage.py collectstatic --noinput
 
 # Apply database migrations
-python3 manage.py migrate
+pipenv run python3 manage.py migrate
 
 # Start the Gunicorn server
-gunicorn project.wsgi:application --bind 0.0.0.0:${PORT:-8080} --workers 3 --log-file -
+pipenv run gunicorn3 project.wsgi:application --bind 0.0.0.0:8000 --workers 2 --log-file -
