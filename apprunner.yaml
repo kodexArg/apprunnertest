@@ -3,11 +3,20 @@ runtime: python3
 build:
   commands:
     build:
+      - pip3 install pipenv
+      - pipenv install --system --deploy
+      - echo "Virtualenv: $(which python3)"
+      - echo "Pipenv: $(pipenv --version)"
+      - echo "Freeze: $(pipenv freeze)"
       - pip3 install -r requirements.txt
 run:
   pre-run:
     - pip3 install pipenv
     - pipenv install --system --deploy
+    - echo "Virtualenv: $(which python3)"
+    - echo "Pipenv: $(pipenv --version)"
+    - echo "Freeze: $(pipenv freeze)"
+
   command: sh startup.sh
   network:
     port: 8080

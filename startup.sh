@@ -1,8 +1,13 @@
 #!/bin/bash
 
 # Install dependencies
-# pip3 install pipenv
-# pipenv install --system --deploy --ignore-pipfile
+pip3 install pipenv
+pipenv install --system --deploy --ignore-pipfile
+
+# print virtualenv, pipenv, freeze
+echo "Virtualenv: $(which python3)"
+echo "Pipenv: $(pipenv --version)"
+echo "Freeze: $(pipenv freeze)"
 
 # Collect static files
 pipenv run python3 manage.py collectstatic --noinput
