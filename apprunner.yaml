@@ -37,20 +37,8 @@ run:
       value: "alvs-virginia-s3"
     - name: AWS_S3_REGION_NAME
       value: "us-east-1"
-    - name: AWS_S3_BUCKET_NAME
-      value: "alvs-virginia-s3"
-    - name: AWS_S3_BUCKET_AUTH
-      value: "False"
-    - name: AWS_S3_MAX_AGE_SECONDS
-      value: "86400"
-    - name: AWS_S3_PUBLIC_URL
-      value: "https://alvs-virginia-s3.s3.us-east-1.amazonaws.com/"
     - name: USE_S3
       value: "true"
-    - name: AWS_ACCESS_KEY_ID
-      value: ""
-    - name: AWS_SECRET_ACCESS_KEY
-      value: ""
     - name: PORT
       value: "8080"
 

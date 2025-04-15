@@ -73,7 +73,6 @@ WSGI_APPLICATION = 'project.wsgi.application'
 print(">", os.getenv('DATABASE_URL'))
 DATABASES = {
     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'), conn_max_age=600, conn_health_checks=True)
-
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -88,51 +87,46 @@ TIME_ZONE = 'America/Argentina/Buenos_Aires'
 USE_I18N = True
 USE_TZ = True
 
-S3_REGION = os.getenv('S3_REGION', 'us-east-1')
-
 if USE_S3:
-    S3_BUCKET_NAME = os.getenv('S3_BUCKET_NAME')
+    AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME', 'us-east-1')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
     AWS_S3_SIGNATURE_VERSION = 's3v4'
-
-    AWS_S3_FILE_OVERWRITE = False
-    AWS_S3_VERIFY = True
-    AWS_LOCATION_STATIC = 'static'  # Default location for static files
-    AWS_LOCATION_MEDIA = 'media'
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
 
     STORAGES = {
         "default": {
             "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
             "OPTIONS": {
-                "access_key": None,
-                "secret_key": None,
-                "bucket_name": os.environ.get("AWS_S3_BUCKET_NAME"),
-                "region_name": os.environ.get("AWS_S3_REGION_NAME"),
+                "bucket_name": AWS_STORAGE_BUCKET_NAME,
+                "region_name": AWS_S3_REGION_NAME,
                 "location": "static",
                 "default_acl": "public-read",
+                "object_parameters": {
+                    "CacheControl": "max-age=86400",
+                },
             },
         },
         "staticfiles": {
             "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
             "OPTIONS": {
-                "access_key": None,
-                "secret_key": None,
-                "bucket_name": os.environ.get("AWS_S3_BUCKET_NAME"),
-                "region_name": os.environ.get("AWS_S3_REGION_NAME"),
+                "bucket_name": AWS_STORAGE_BUCKET_NAME,
+                "region_name": AWS_S3_REGION_NAME,
                 "location": "static",
                 "default_acl": "public-read",
+                "object_parameters": {
+                    "CacheControl": "max-age=86400",
+                },
             },
         },
     }
 
-    STATIC_URL = f"https://{S3_BUCKET_NAME}.s3.{S3_REGION}.amazonaws.com/{AWS_LOCATION_STATIC}/"  # Updated this line
-    MEDIA_URL = f"https://{S3_BUCKET_NAME}.s3.{S3_REGION}.amazonaws.com/{AWS_LOCATION_MEDIA}/"  # Updated this line
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 else:
-
     STATIC_URL = '/static/'
     MEDIA_URL = '/media/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
